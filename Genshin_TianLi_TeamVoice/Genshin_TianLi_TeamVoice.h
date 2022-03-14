@@ -7,10 +7,9 @@
 #include <QAudioOutput>
 #include <QAudioFormat>
 #include <QAudioDeviceInfo>
-//#include "AudioInputSendThread.h"
-//#include "AudioOutputReceiveThread.h"
 
-#include "ref/AudioWebSocketThread.h"
+#include "AudioSocketManagment.h"
+
 class Genshin_TianLi_TeamVoice : public QMainWindow
 {
     Q_OBJECT
@@ -29,11 +28,8 @@ private:
     QAudioInput* input_audio_device = nullptr;
     QAudioOutput* output_audio_device = nullptr;
 
-    //AudioInputSendThread* audio_input_server_thread = nullptr;
-    //AudioOutputReceiveThread* audio_output_server_thread = nullptr;
 
-    //AudioPlayThread aud;
-    AudioWebSocketThread audsend;
+    AudioSocketManagment audioSocketManagment;
 private:
     /// <summary>
     /// 设置音频输入格式

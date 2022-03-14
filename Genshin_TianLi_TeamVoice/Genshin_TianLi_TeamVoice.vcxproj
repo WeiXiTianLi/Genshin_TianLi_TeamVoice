@@ -85,6 +85,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AudioSocketInputThread.cpp" />
+    <ClCompile Include="AudioSocketManagment.cpp" />
+    <ClCompile Include="AudioSocketOutputThread.cpp" />
     <ClCompile Include="ref\AudioWebSocketThread.cpp" />
     <QtRcc Include="Genshin_TianLi_TeamVoice.qrc" />
     <QtUic Include="Genshin_TianLi_TeamVoice.ui" />
@@ -93,7 +96,16 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="ref\AudioWebSocketThread.h" />
+    <ClInclude Include="ref\AudioWebSocketThread.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="AudioSocketManagment.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="AudioSocketOutputThread.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="AudioSocketInputThread.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

@@ -103,11 +103,11 @@ void Genshin_TianLi_TeamVoice::combobox_currentIndexChanged_inputDevice(const QS
 
 void Genshin_TianLi_TeamVoice::set_start_input()
 {
-    qDebug() << "set_start_input\n";
+    qDebug() << "set_start_input " << audioDevice_input_info.deviceName();
 
-    audsend.setAudioInputDevice(audioDevice_input_info);
-    audsend.setAudioInputFormat(8000, 1, 16);
-    audsend.startInput();
+    audioSocketManagment.setAudioInputDevice(audioDevice_input_info);
+    audioSocketManagment.setAudioInputFormat(8000, 1, 16);
+    audioSocketManagment.startInput();
 
 
 }
@@ -120,10 +120,10 @@ void Genshin_TianLi_TeamVoice::set_start_output()
 {
     qDebug() << "set_start_output\n";
 
-    audsend.setAudioOutputDevice(audioDevice_output_info);
-    audsend.setAudioOutputFormat(8000, 1, 16);
-    audsend.setOutputVolumn(100);
-    audsend.startOutput();
+    audioSocketManagment.setAudioOutputDevice(audioDevice_output_info);
+    audioSocketManagment.setAudioOutputFormat(8000, 1, 16);
+    audioSocketManagment.setOutputVolumn(100);
+    audioSocketManagment.startOutput();
     //audsend.run();
 }
 void Genshin_TianLi_TeamVoice::set_stop_output()
