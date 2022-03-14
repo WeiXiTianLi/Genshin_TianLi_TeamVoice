@@ -124,6 +124,7 @@ void Genshin_TianLi_TeamVoice::set_start_output()
     audsend.setAudioOutputFormat(8000, 1, 16);
     audsend.setOutputVolumn(100);
     audsend.startOutput();
+    //audsend.run();
 }
 void Genshin_TianLi_TeamVoice::set_stop_output()
 {

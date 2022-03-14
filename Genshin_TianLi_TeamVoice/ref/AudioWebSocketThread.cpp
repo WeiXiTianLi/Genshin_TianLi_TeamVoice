@@ -44,8 +44,12 @@ void AudioWebSocketThread::cleanAllAudioBuffer(void)
 
 void AudioWebSocketThread::run(void)
 {
+    qDebug() << "Start Output Run!";
+
     while (!this->isInterruptionRequested())
     {
+        qDebug() << " Run....";
+
         if (!m_IsPlaying)
         {
             break;
@@ -129,6 +133,7 @@ void AudioWebSocketThread::startInput(){
 
 void AudioWebSocketThread::startOutput()
 {
+    run();
 }
 
 void AudioWebSocketThread::stopInput(){
@@ -149,7 +154,7 @@ void AudioWebSocketThread::webSocket_binaryMessageReceived(const QByteArray& mes
     
     video *vp_ptr = (video*)message.data();
     addAudioBuffer(vp_ptr->data, vp_ptr->lens);
-    qDebug() <<"Received byte:" << message.size();
+    //qDebug() <<"Received byte:" << message.size();
 }
 
 void AudioWebSocketThread::onReadyRead()
