@@ -1,5 +1,7 @@
 #include "Genshin_TianLi_TeamVoice.h"
 
+#include <QJsonObject>
+#include <QJsonDocument>
 #include <QAudioDeviceInfo>
 #include <QComboBox>
 Genshin_TianLi_TeamVoice::Genshin_TianLi_TeamVoice(QWidget *parent)
@@ -16,9 +18,32 @@ Genshin_TianLi_TeamVoice::Genshin_TianLi_TeamVoice(QWidget *parent)
         [=](const QString& text) {combobox_currentIndexChanged_inputDevice(text, QAudio::Mode::AudioInput); });
     connect(ui.comboBox_output, QOverload<const QString&>::of(&QComboBox::currentIndexChanged),
         [=](const QString& text) {combobox_currentIndexChanged_inputDevice(text, QAudio::Mode::AudioOutput); });
+    // 开始连接
+    connect(ui.pushButton_start, &QPushButton::clicked, this, &Genshin_TianLi_TeamVoice::pushbutton_startConnect);
 
+    // 停止连接
+    connect(ui.pushButton_stop, &QPushButton::clicked, this, &Genshin_TianLi_TeamVoice::pushbutton_stopConnect);
+    // 加入队伍
+    connect(ui.pushButton_joinGroup, &QPushButton::clicked, this, &Genshin_TianLi_TeamVoice::pushbutton_joinGroup);
+    // 退出队伍
+    connect(ui.pushButton_exitGroup, &QPushButton::clicked, this, &Genshin_TianLi_TeamVoice::pushbutton_exitGroup);
+    // 发送队伍消息
+    connect(ui.pushButton_sendGroupMge, &QPushButton::clicked, this, &Genshin_TianLi_TeamVoice::pushbutton_sendGroupMessage);
+    // 发送私聊消息
+    connect(ui.pushButton_sendUIDMge, &QPushButton::clicked, this, &Genshin_TianLi_TeamVoice::pushbutton_sendUidMessage);
+
+
+    // 开始拾音
     connect(ui.pushButton_getInput, &QPushButton::clicked, this, &Genshin_TianLi_TeamVoice::set_start_input);
+    // 开始播音
     connect(ui.pushButton_setOutput, &QPushButton::clicked, this, &Genshin_TianLi_TeamVoice::set_start_output);
+
+    // 分贝数显示
+    connect(&audioSocketManagment, &AudioSocketManagment::dbInputChange, this, &Genshin_TianLi_TeamVoice::set_input_db);
+    connect(&audioSocketManagment, &AudioSocketManagment::dbInputChange, this, &Genshin_TianLi_TeamVoice::set_input_db);
+
+    // 解析接收字符串
+    connect(&audioSocketManagment, &AudioSocketManagment::recviceTextMessage, this, &Genshin_TianLi_TeamVoice::recviceSocketMessage);
 
 }
 void Genshin_TianLi_TeamVoice::set_input_audio_format()
@@ -68,6 +93,11 @@ QList<QString> Genshin_TianLi_TeamVoice::get_device_list(QAudio::Mode inout)
     return audio_device_name_vector;
 }
 
+void Genshin_TianLi_TeamVoice::sendMessage(QString message)
+{
+    audioSocketManagment.sendTextMessage(message);
+}
+
 void Genshin_TianLi_TeamVoice::combobox_currentIndexChanged_inputDevice(const QString& text, QAudio::Mode inout)
 {
     qDebug() << "combobox_currentIndexChanged_inputDevice"<<"\n";
@@ -101,6 +131,97 @@ void Genshin_TianLi_TeamVoice::combobox_currentIndexChanged_inputDevice(const QS
     }
 }
 
+void Genshin_TianLi_TeamVoice::pushbutton_startConnect()
+{
+    qDebug() << "开始连接";
+    if (ui.lineEdit_ip_port->text()=="")
+    {
+        QString url = ui.lineEdit_ip->text();
+        qDebug() << "连接url:"<<url;
+        audioSocketManagment.startSendRecviceSocket(url);
+    }
+    else
+    {
+        QString url = ui.lineEdit_ip->text()+":"+ ui.lineEdit_ip_port->text();
+        qDebug() << "连接url:" << url;
+        audioSocketManagment.startSendRecviceSocket(url);
+    }
+}
+
+void Genshin_TianLi_TeamVoice::pushbutton_stopConnect()
+{
+    audioSocketManagment.stopSendRecviceSocket();
+}
+
+void Genshin_TianLi_TeamVoice::pushbutton_joinGroup()
+{
+    // 加入队伍
+
+    QString id_Group = ui.lineEdit_toGroupUID->text();
+
+    QJsonDocument jdc;
+    QJsonObject job1;
+    QJsonObject job2;
+    job1.insert("connectTo",id_Group);
+    job2.insert("control", job1);
+    jdc.setObject(job2);
+
+    QString message = jdc.toJson();
+    sendMessage(message);
+}
+
+void Genshin_TianLi_TeamVoice::pushbutton_exitGroup()
+{
+    // 退出队伍
+    QString id_Group = ui.lineEdit_toGroupUID->text();
+
+    QJsonDocument jdc;
+    QJsonObject job1;
+    QJsonObject job2;
+    job1.insert("connectTo", id_Group);
+    job1.insert("exitRoom", 1);
+    job2.insert("control", job1);
+    jdc.setObject(job2);
+
+    QString message = jdc.toJson();
+    sendMessage(message);
+}
+
+void Genshin_TianLi_TeamVoice::pushbutton_sendGroupMessage()
+{
+    // 发送队伍消息
+    QString msg = ui.lineEdit->text();
+
+    QJsonDocument jdc;
+    QJsonObject job;
+    job.insert("message2room", msg);
+    jdc.setObject(job);
+
+    QString message = jdc.toJson();
+    sendMessage(message);
+}
+
+void Genshin_TianLi_TeamVoice::pushbutton_sendUidMessage()
+{
+    // 发送私聊消息
+    
+    QString msg = ui.lineEdit_2->text();
+    QString id = ui.lineEdit_toUID->text();
+
+    QJsonDocument jdc;
+    QJsonObject job;
+    QJsonObject job1;
+    job1.insert("toId", id);
+    job1.insert("message", msg);
+    job.insert("message2id", job1);
+    job.insert("sender", id);
+    jdc.setObject(job);
+    
+    QString message = jdc.toJson();
+    sendMessage(message);
+}
+
+
 void Genshin_TianLi_TeamVoice::set_start_input()
 {
     qDebug() << "set_start_input " << audioDevice_input_info.deviceName();
@@ -133,9 +254,49 @@ void Genshin_TianLi_TeamVoice::set_stop_output()
 }
 void Genshin_TianLi_TeamVoice::set_input_value(int value)
 {
-
+    audioSocketManagment.setInputVolumn(value);
 }
 void Genshin_TianLi_TeamVoice::set_output_value(int value)
 {
+    audioSocketManagment.setOutputVolumn(value);
+}
+
+void Genshin_TianLi_TeamVoice::set_input_db(int dbValue)
+{
+    ui.progressBar_input->setValue(dbValue);
+}
+void Genshin_TianLi_TeamVoice::set_output_db(int dbValue)
+{
+    ui.progressBar_output->setValue(dbValue);
+}
+
+void Genshin_TianLi_TeamVoice::recviceSocketMessage(QString message)
+{
+    qDebug().noquote() << message;
+    QJsonParseError err_rpt;
+    QJsonDocument  Doc = QJsonDocument::fromJson(message.toStdString().c_str(), &err_rpt);//字符串格式化为JSON
+    if (err_rpt.error != QJsonParseError::NoError)
+    {
+        qDebug() << tr("tr_JSOR_TypeError");
+        return;
+    }
+    else {
+        QString type = Doc.object().find("type")->toString();
+        QString msg = Doc.object().find("message")->toString();
+        QString type_out = tr("tr_UnDefind:");
+        qDebug() << type<<" : " << msg;
+
+        if (type == "user")
+        {
+            type_out = tr("tr_ShiLiao:");
+        }
+        if (type == "room")
+        {
+            type_out =tr("tr_FangJian:");
+        }
+
+        ui.textEdit->append(type_out + msg);
+    }
+
 
 }

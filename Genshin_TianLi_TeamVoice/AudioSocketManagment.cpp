@@ -9,10 +9,15 @@ AudioSocketManagment::AudioSocketManagment(QObject* parent)
 
     webSocket = new QWebSocket();
     webSocket->setParent(this);
-    webSocket->open(QUrl("ws://ddns.minemc.top:54321?id=" + QString::number(QDateTime::currentDateTimeUtc().toMSecsSinceEpoch())));
+
+    connect(webSocket, &QWebSocket::textMessageReceived, this, &AudioSocketManagment::recviceTextMessage);
+    //connect(webSocket, &QWebSocket::textMessageReceived, [](QString message) {qDebug() << message;});
 
     audioSocketInputThread = new AudioSocketInputThread(webSocket);
     audioSocketOutputThread = new AudioSocketOutputThread(webSocket);
+
+    connect(audioSocketInputThread, &AudioSocketInputThread::dbChange, this, &AudioSocketManagment::dbInputChange);
+    connect(audioSocketOutputThread, &AudioSocketOutputThread::dbChange, this, &AudioSocketManagment::dbOutputChange);
 }
 
 AudioSocketManagment::~AudioSocketManagment()
@@ -42,9 +47,36 @@ void AudioSocketManagment::setAudioOutputFormat(int sampleRate, int channelCount
     audioSocketOutputThread->setAudioOutputFormat(sampleRate, channelCount, sampleSize);
 }
 
+void AudioSocketManagment::setInputVolumn(qreal volumn)
+{
+}
+
 void AudioSocketManagment::setOutputVolumn(qreal volumn)
 {
     audioSocketOutputThread->setOutputVolumn(volumn);
+}
+
+void AudioSocketManagment::startSendRecviceSocket(QString url)
+{
+    switch (webSocket->state())
+    {
+    case QAbstractSocket::SocketState::UnconnectedState:
+    {
+        webSocket->open(QUrl(url));
+        break;
+    }
+    default:
+    {
+        webSocket->close();
+        webSocket->open(QUrl(url));
+        break;
+    }
+    }
+}
+
+void AudioSocketManagment::stopSendRecviceSocket()
+{
+    webSocket->close();
 }
 
 void AudioSocketManagment::startInput()
@@ -67,4 +99,9 @@ void AudioSocketManagment::stopInput()
 void AudioSocketManagment::stopOutput()
 {
     audioSocketOutputThread->stopOutput();
+}
+
+void AudioSocketManagment::sendTextMessage(const QString& message)
+{
+    webSocket->sendTextMessage(message);
 }

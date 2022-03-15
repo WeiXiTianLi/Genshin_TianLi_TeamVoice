@@ -14,6 +14,7 @@ AudioSocketOutputThread::AudioSocketOutputThread(QWebSocket* ioWebSocket, QObjec
 
 AudioSocketOutputThread::~AudioSocketOutputThread()
 {
+    stopOutput();
     delete m_OutPut;
     delete m_AudioIo;
 }
@@ -38,7 +39,7 @@ void AudioSocketOutputThread::run(void)
 
     while (!this->isInterruptionRequested())
     {
-        // qDebug() << " Run....";
+        //qDebug() << " Run....";
 
         if (!m_IsPlaying)
         {

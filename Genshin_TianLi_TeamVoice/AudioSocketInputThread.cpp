@@ -8,6 +8,8 @@ AudioSocketInputThread::AudioSocketInputThread(QWebSocket* ioWebSocket, QObject*
 
 AudioSocketInputThread::~AudioSocketInputThread()
 {
+    stopInput();
+
     delete input;
     delete inputDevice;
 }
@@ -45,6 +47,7 @@ void AudioSocketInputThread::onReadyRead()
     memset(&vp.data, 0, sizeof(vp));
     vp.lens = inputDevice->read(vp.data, 960);
     int num = webSocket->sendBinaryMessage(QByteArray((const char*)&vp, sizeof(vp)));
+    qDebug() << num;
 }
 
 

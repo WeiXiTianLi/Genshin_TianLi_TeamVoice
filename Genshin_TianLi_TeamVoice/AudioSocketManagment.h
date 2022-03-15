@@ -26,11 +26,23 @@ public:
     void setAudioInputFormat(int sampleRate, int channelCount, int sampleSize);
     void setAudioOutputFormat(int sampleRate, int channelCount, int sampleSize);
 
+    void setInputVolumn(qreal volumn);
     void setOutputVolumn(qreal volumn);
+
+    void startSendRecviceSocket(QString url);
+    void stopSendRecviceSocket();
 
     void startInput();
     void startOutput();
     void stopInput();
     void stopOutput();
 
+public slots:
+    void sendTextMessage(const QString& message);
+signals:
+    void recviceTextMessage(const QString& message);
+
+signals:
+    void dbInputChange(int dbValue);
+    void dbOutputChange(int dbValue);
 };

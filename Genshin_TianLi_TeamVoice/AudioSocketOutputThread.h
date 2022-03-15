@@ -56,4 +56,6 @@ public:
 
 public slots:
     void webSocket_binaryMessageReceived(const QByteArray& message);
+signals:
+    void dbChange(int dbValue);
 };

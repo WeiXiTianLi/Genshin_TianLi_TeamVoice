@@ -37,5 +37,8 @@ public:
 
 public slots:
     void onReadyRead();
+
+signals:
+    void dbChange(int dbValue);
 };
 
