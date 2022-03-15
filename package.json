@@ -1,0 +1,22 @@
+{
+  "name": "Genshin_TianLi_TeamVoice",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:WeiXiTianLi/Genshin_TianLi_TeamVoice.git",
+  "author": "GengGode <GengGode@outlook.com>",
+  "license": "LGPL-3.0-or-later",
+  "scripts": {
+    "commit": "cz"
+  },
+  "dependencies": {
+    "commitizen": "^4.2.4"
+  },
+  "devDependencies": {
+    "cz-conventional-changelog": "3.3.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
