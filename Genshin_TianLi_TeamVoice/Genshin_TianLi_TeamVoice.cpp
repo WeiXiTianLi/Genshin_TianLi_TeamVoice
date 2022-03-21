@@ -34,13 +34,17 @@ Genshin_TianLi_TeamVoice::Genshin_TianLi_TeamVoice(QWidget *parent)
 
 
     // 开始拾音
-    connect(ui.pushButton_getInput, &QPushButton::clicked, this, &Genshin_TianLi_TeamVoice::set_start_input);
+    connect(ui.pushButton_getInput, &QPushButton::clicked, this, &Genshin_TianLi_TeamVoice::pushbutton_startInput);
+    // 停止拾音
+    connect(ui.pushButton_stopInput, &QPushButton::clicked, this, &Genshin_TianLi_TeamVoice::pushbutton_stopInput);
     // 开始播音
-    connect(ui.pushButton_setOutput, &QPushButton::clicked, this, &Genshin_TianLi_TeamVoice::set_start_output);
+    connect(ui.pushButton_setOutput, &QPushButton::clicked, this, &Genshin_TianLi_TeamVoice::pushbutton_startOutput);
+    // 停止播音
+    connect(ui.pushButton_stopOutput, &QPushButton::clicked, this, &Genshin_TianLi_TeamVoice::pushbutton_stopOutput);
 
     // 分贝数显示
     connect(&audioSocketManagment, &AudioSocketManagment::dbInputChange, this, &Genshin_TianLi_TeamVoice::set_input_db);
-    connect(&audioSocketManagment, &AudioSocketManagment::dbInputChange, this, &Genshin_TianLi_TeamVoice::set_input_db);
+    connect(&audioSocketManagment, &AudioSocketManagment::dbOutputChange, this, &Genshin_TianLi_TeamVoice::set_output_db);
 
     // 解析接收字符串
     connect(&audioSocketManagment, &AudioSocketManagment::recviceTextMessage, this, &Genshin_TianLi_TeamVoice::recviceSocketMessage);
