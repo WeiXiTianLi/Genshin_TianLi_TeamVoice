@@ -81,7 +81,7 @@ void AudioSocketOutputThread::setAudioOutputFormat(int sampleRate, int channelCo
     formatOutput.setSampleSize(sampleSize);
     formatOutput.setChannelCount(channelCount);
     formatOutput.setCodec("audio/pcm");
-    formatOutput.setSampleType(QAudioFormat::SignedInt);
+    formatOutput.setSampleType(QAudioFormat::UnSignedInt);
     formatOutput.setByteOrder(QAudioFormat::LittleEndian);
 
     if (m_OutPut != nullptr) delete m_OutPut;

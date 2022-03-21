@@ -25,7 +25,7 @@ void AudioSocketInputThread::setAudioInputFormat(int sampleRate, int channelCoun
     formatInput.setChannelCount(channelCount);
     formatInput.setSampleSize(sampleSize);
     formatInput.setCodec("audio/pcm");
-    formatInput.setSampleType(QAudioFormat::SignedInt);
+    formatInput.setSampleType(QAudioFormat::UnSignedInt);
     formatInput.setByteOrder(QAudioFormat::LittleEndian);
     if (input != nullptr) delete input;
     input = new QAudioInput(m_audioInputDevice, formatInput, this);
