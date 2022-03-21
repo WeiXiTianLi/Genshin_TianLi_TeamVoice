@@ -55,6 +55,10 @@ void AudioSocketOutputThread::run(void)
             //拷贝960字节的数据
             char* writeData = new char[FRAME_LEN_60ms];
             memcpy(writeData, &m_PCMDataBuffer.data()[m_CurrentPlayIndex], FRAME_LEN_60ms);
+
+            //20.0 * log10(abs((Convert_8to16bit(vp.data[0], vp.data[1]))))
+            dbChange(20.0 * log10(abs((Convert_8to16bit(writeData[0], writeData[1])))));
+
             // 写入音频数据
             m_AudioIo->write(writeData, FRAME_LEN_60ms);
             m_CurrentPlayIndex += FRAME_LEN_60ms;
