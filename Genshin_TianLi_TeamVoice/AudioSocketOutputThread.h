@@ -7,6 +7,7 @@
 #include <QAudioFormat>
 #include <QAudioOutput>
 
+#include "VoiceFrame.h"
 class AudioSocketOutputThread : public QThread
 {
     Q_OBJECT
@@ -31,10 +32,6 @@ public:
     // 播放状态
     volatile bool m_IsPlaying = true;
 
-    struct video {
-        int lens;
-        char data[960];
-    };
 
     // ----------- 添加数据相关 ----------------------------------------
     // 添加数据

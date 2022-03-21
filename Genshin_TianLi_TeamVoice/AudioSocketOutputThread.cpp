@@ -114,7 +114,6 @@ void AudioSocketOutputThread::stopOutput()
 
 void AudioSocketOutputThread::webSocket_binaryMessageReceived(const QByteArray& message)
 {
-    video* vp_ptr = (video*)message.data();
     addAudioBuffer(vp_ptr->data, vp_ptr->lens);
     qDebug() <<"Received byte:" << message.size();
 }

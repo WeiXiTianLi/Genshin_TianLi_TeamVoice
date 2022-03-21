@@ -43,7 +43,7 @@ void AudioSocketInputThread::stopInput() {
 
 void AudioSocketInputThread::onReadyRead()
 {
-    video vp;
+    VoiceFrame vp;
     memset(&vp.data, 0, sizeof(vp));
     vp.lens = inputDevice->read(vp.data, 960);
     int num = webSocket->sendBinaryMessage(QByteArray((const char*)&vp, sizeof(vp)));

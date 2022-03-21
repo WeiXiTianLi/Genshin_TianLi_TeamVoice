@@ -6,6 +6,8 @@
 #include <QAudioInput>
 #include <QAudioFormat>
 
+#include "VoiceFrame.h"
+
 class AudioSocketInputThread : public QThread
 {
     Q_OBJECT
@@ -21,11 +23,6 @@ public:
     QIODevice* inputDevice = nullptr;
 
     QAudioFormat formatInput;
-
-    struct video {
-        int lens;
-        char data[960];
-    };
 
     void setAudioInputDevice(const QAudioDeviceInfo& audioDevice);
 

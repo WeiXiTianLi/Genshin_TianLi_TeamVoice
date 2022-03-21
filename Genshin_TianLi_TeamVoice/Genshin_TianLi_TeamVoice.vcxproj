@@ -109,6 +109,7 @@
     <ClCompile Include="AudioSocketManagment.cpp" />
     <ClCompile Include="AudioSocketOutputThread.cpp" />
     <ClCompile Include="ref\AudioWebSocketThread.cpp" />
+    <ClCompile Include="VoiceFrame.cpp" />
     <QtRcc Include="Genshin_TianLi_TeamVoice.qrc" />
     <QtUic Include="Genshin_TianLi_TeamVoice.ui" />
     <QtMoc Include="Genshin_TianLi_TeamVoice.h" />
@@ -117,6 +118,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ref\AudioWebSocketThread.h" />
+    <ClInclude Include="VoiceFrame.h" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="AudioSocketManagment.h" />
