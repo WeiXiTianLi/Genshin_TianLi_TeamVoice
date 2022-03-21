@@ -11,7 +11,7 @@ AudioSocketInputThread::~AudioSocketInputThread()
     stopInput();
 
     delete input;
-    delete inputDevice;
+    // delete inputDevice;
 }
 
 void AudioSocketInputThread::setAudioInputDevice(const QAudioDeviceInfo& audioDevice)
@@ -27,6 +27,7 @@ void AudioSocketInputThread::setAudioInputFormat(int sampleRate, int channelCoun
     formatInput.setCodec("audio/pcm");
     formatInput.setSampleType(QAudioFormat::SignedInt);
     formatInput.setByteOrder(QAudioFormat::LittleEndian);
+    if (input != nullptr) delete input;
     input = new QAudioInput(m_audioInputDevice, formatInput, this);
 }
 
@@ -38,7 +39,7 @@ void AudioSocketInputThread::startInput() {
 
 void AudioSocketInputThread::stopInput() {
     qDebug() << "input Stop!";
-    input->stop();
+    if(input!=nullptr)input->stop();
 }
 
 void AudioSocketInputThread::onReadyRead()

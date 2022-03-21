@@ -16,7 +16,7 @@ AudioSocketOutputThread::~AudioSocketOutputThread()
 {
     stopOutput();
     delete m_OutPut;
-    delete m_AudioIo;
+    //delete m_AudioIo;
 }
 
 void AudioSocketOutputThread::addAudioBuffer(char* pData, int len)
@@ -97,7 +97,7 @@ void AudioSocketOutputThread::setAudioOutputFormat(int sampleRate, int channelCo
 
 void AudioSocketOutputThread::setOutputVolumn(qreal volumn)
 {
-    m_OutPut->setVolume(volumn);
+    if (m_OutPut != nullptr) m_OutPut->setVolume(volumn);
 }
 
 void AudioSocketOutputThread::startOutput()
@@ -108,7 +108,7 @@ void AudioSocketOutputThread::startOutput()
 
 void AudioSocketOutputThread::stopOutput()
 {
-    m_OutPut->stop();
+    if (m_OutPut != nullptr)m_OutPut->stop();
     cleanAllAudioBuffer();
 }
 
