@@ -55,6 +55,9 @@
     <ClCompile Include="VoiceFrame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AudioOutputThread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="AudioSocketManagment.h">
@@ -64,6 +67,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="AudioSocketInputThread.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="AudioOutputThread.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

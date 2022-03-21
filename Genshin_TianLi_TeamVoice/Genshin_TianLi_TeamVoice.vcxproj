@@ -105,6 +105,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AudioOutputThread.cpp" />
     <ClCompile Include="AudioSocketInputThread.cpp" />
     <ClCompile Include="AudioSocketManagment.cpp" />
     <ClCompile Include="AudioSocketOutputThread.cpp" />
@@ -117,6 +118,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="AudioOutputThread.h" />
     <ClInclude Include="ref\AudioWebSocketThread.h" />
     <ClInclude Include="VoiceFrame.h" />
   </ItemGroup>

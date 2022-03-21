@@ -10,6 +10,15 @@ AudioSocketOutputThread::AudioSocketOutputThread(QWebSocket* ioWebSocket, QObjec
 
 AudioSocketOutputThread::~AudioSocketOutputThread()
 {
+
+    for (auto audioOutputUserThread : audioOutputUserThreads)
+    {
+        delete audioOutputUserThread;
+    }
+
+    cv_updata.notify_all();
+    std::lock_guard<std::mutex> lock(mutex_updata);
+
     stopOutput();
     delete m_OutPut;
     //delete m_AudioIo;
@@ -17,13 +26,14 @@ AudioSocketOutputThread::~AudioSocketOutputThread()
 
 void AudioSocketOutputThread::addAudioBuffer(char* pData, int len)
 {
-    QMutexLocker locker(&m_Mutex);
+    std::lock_guard<std::mutex> lock(mutex_updata);
     m_PCMDataBuffer.append(pData, len);
+    cv_updata.notify_all();
 }
 
 void AudioSocketOutputThread::cleanAllAudioBuffer(void)
 {
-    QMutexLocker locker(&m_Mutex);
+    std::lock_guard<std::mutex> lock(mutex_updata);
     m_CurrentPlayIndex = 0;
     m_PCMDataBuffer.clear();
     m_IsPlaying = false;
@@ -37,9 +47,9 @@ void AudioSocketOutputThread::run(void)
         {
             break;
         }
-
-        QMutexLocker locker(&m_Mutex);
-
+        std::unique_lock<std::mutex> lock(mutex_updata);
+        cv_updata.wait_for(lock, std::chrono::milliseconds(60), []()->bool {return false; });
+        lock.unlock();
         if (m_PCMDataBuffer.size() < m_CurrentPlayIndex + FRAME_LEN_60ms) {//缓冲区不够播放60ms音频
             continue;
         }
@@ -71,11 +81,19 @@ void AudioSocketOutputThread::run(void)
 void AudioSocketOutputThread::setAudioOutputDevice(QAudioDeviceInfo audioDevice)
 {
     m_audioOutputDevice = audioDevice;
+    for (auto audioOutputUserThread :audioOutputUserThreads)
+    {
+        audioOutputUserThread->setAudioOutputDevice(m_audioOutputDevice);
+    }
 }
 
 void AudioSocketOutputThread::setAudioOutputFormat(int sampleRate, int channelCount, int sampleSize)
 {
-    QMutexLocker locker(&m_Mutex);
+    std::lock_guard<std::mutex> lock(mutex_updata);
+
+    sampleRate_User = sampleRate;
+    channelCount_User = channelCount;
+    sampleSize_User = sampleSize;
 
     formatOutput.setSampleRate(sampleRate);
     formatOutput.setSampleSize(sampleSize);
@@ -88,6 +106,11 @@ void AudioSocketOutputThread::setAudioOutputFormat(int sampleRate, int channelCo
 
     m_OutPut = new QAudioOutput(m_audioOutputDevice, formatOutput);
     m_AudioIo = m_OutPut->start();
+
+    for (auto audioOutputUserThread : audioOutputUserThreads)
+    {
+        audioOutputUserThread->setAudioOutputFormat(sampleRate, channelCount, sampleSize);
+    }
 }
 
 void AudioSocketOutputThread::setOutputVolumn(qreal volumn)
@@ -97,18 +120,72 @@ void AudioSocketOutputThread::setOutputVolumn(qreal volumn)
 
 void AudioSocketOutputThread::startOutput()
 {
-    //run();
-}
+    start();
 
+    for (auto audioOutputUserThread : audioOutputUserThreads)
+    {
+        audioOutputUserThread->startOutput();
+    }
+}
 
 void AudioSocketOutputThread::stopOutput()
 {
     if (m_OutPut != nullptr)m_OutPut->stop();
     cleanAllAudioBuffer();
+
+    for (auto audioOutputUserThread : audioOutputUserThreads)
+    {
+        audioOutputUserThread->stopOutput();
+    }
 }
 
 void AudioSocketOutputThread::webSocket_binaryMessageReceived(const QByteArray& message)
 {
-    addAudioBuffer(vp_ptr->data, vp_ptr->lens);
-    qDebug() <<"Received byte:" << message.size();
+    VoiceFrame* vp_ptr = (VoiceFrame*)message.data();
+    int uid = vp_ptr->uid;
+
+    // 如果uid没有，就在共用音频输出设备输出，并直接返回
+    if (uid == 0)
+    {
+        addAudioBuffer(vp_ptr->data, vp_ptr->lens);
+        return;
+    }
+
+    // 尝试查询uid，找到对应的输出线程
+    if (audioOutputUserThreads[uid] == nullptr)
+    {
+        audioOutputUserThreads[uid] = new AudioOutputThread(uid);
+        audioOutputUserThreads[uid]->setAudioOutputDevice(m_audioOutputDevice);
+        audioOutputUserThreads[uid]->setAudioOutputFormat(sampleRate_User, channelCount_User, sampleSize_User);
+        connect(audioOutputUserThreads[uid], &AudioOutputThread::dbChange, [&](int dbValue) {this->dbChange_User(uid, dbValue); });
+    }
+    audioOutputUserThreads[uid]->addAudioBuffer(vp_ptr->data, vp_ptr->lens);
 }
+
+void AudioSocketOutputThread::setAudioOutputDevice_User(int uid, QAudioDeviceInfo audioDevice)
+{
+    audioOutputUserThreads[uid]->setAudioOutputDevice(audioDevice);
+}
+
+void AudioSocketOutputThread::setAudioOutputFormat_User(int uid, int sampleRate, int channelCount, int sampleSize)
+{
+    audioOutputUserThreads[uid]->setAudioOutputFormat(sampleRate, channelCount, sampleSize);
+}
+
+void AudioSocketOutputThread::setOutputVolumn_User(int uid, qreal volumn)
+{
+    audioOutputUserThreads[uid]->setOutputVolumn(volumn);
+}
+
+void AudioSocketOutputThread::startOutput_User(int uid)
+{
+    audioOutputUserThreads[uid]->startOutput();
+}
+
+void AudioSocketOutputThread::stopOutput_User(int uid)
+{
+    audioOutputUserThreads[uid]->stopOutput();
+}
+
+
+

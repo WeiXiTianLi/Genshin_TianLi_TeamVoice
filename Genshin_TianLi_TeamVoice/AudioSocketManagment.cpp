@@ -87,9 +87,7 @@ void AudioSocketManagment::startInput()
 
 void AudioSocketManagment::startOutput()
 {
-    //audioSocketOutputThread->startOutput();
-    //
-    audioSocketOutputThread->start();
+    audioSocketOutputThread->startOutput();
 }
 
 void AudioSocketManagment::stopInput()
