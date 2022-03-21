@@ -68,13 +68,13 @@ private slots:
     // ·¢ËÍË½ÁÄÏûÏ¢
     void pushbutton_sendUidMessage();
     // ¿ªÊ¼Ê°Òô
-    void set_start_input();
+    void pushbutton_startInput();
     // Í£Ö¹Ê°Òô
-    void set_stop_input();
+    void pushbutton_stopInput();
     // ¿ªÊ¼²¥Òô
-    void set_start_output();
+    void pushbutton_startOutput();
     // Í£Ö¹²¥Òô
-    void set_stop_output();
+    void pushbutton_stopOutput();
 
     void set_input_value(int value);
     void set_output_value(int value);
