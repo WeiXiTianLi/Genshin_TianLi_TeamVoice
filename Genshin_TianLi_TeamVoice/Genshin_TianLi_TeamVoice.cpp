@@ -222,7 +222,7 @@ void Genshin_TianLi_TeamVoice::pushbutton_sendUidMessage()
 }
 
 
-void Genshin_TianLi_TeamVoice::set_start_input()
+void Genshin_TianLi_TeamVoice::pushbutton_startInput()
 {
     qDebug() << "pushbutton_startInput " << audioDevice_input_info.deviceName();
 
@@ -230,11 +230,13 @@ void Genshin_TianLi_TeamVoice::set_start_input()
     audioSocketManagment.setAudioInputFormat(8000, 1, 16);
     audioSocketManagment.startInput();
 }
-void Genshin_TianLi_TeamVoice::set_stop_input()
+void Genshin_TianLi_TeamVoice::pushbutton_stopInput()
 {
-
+    qDebug() << "pushbutton_stopInput\n";
+    audioSocketManagment.stopInput();
+    set_input_db(0);
 }
-void Genshin_TianLi_TeamVoice::set_start_output()
+void Genshin_TianLi_TeamVoice::pushbutton_startOutput()
 {
     qDebug() << "pushbutton_startOutput\n";
 
@@ -244,10 +246,11 @@ void Genshin_TianLi_TeamVoice::set_start_output()
     audioSocketManagment.startOutput();
     //audsend.run();
 }
-void Genshin_TianLi_TeamVoice::set_stop_output()
+void Genshin_TianLi_TeamVoice::pushbutton_stopOutput()
 {
-    qDebug() << "set_stop_output\n";
-
+    qDebug() << "pushbutton_stopOutput\n";
+    audioSocketManagment.stopOutput();
+    set_output_db(0);
 }
 void Genshin_TianLi_TeamVoice::set_input_value(int value)
 {
