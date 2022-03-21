@@ -1,9 +1,5 @@
 #include "AudioSocketOutputThread.h"
 
-
-#define MAX_AUDIO_LEN 960000 //如果接收缓冲区大于这个数值就剪掉
-#define FRAME_LEN_60ms 960 //每一个语音帧长度是960字节
-
 AudioSocketOutputThread::AudioSocketOutputThread(QWebSocket* ioWebSocket, QObject* parent)
     : QThread(parent)
 {
