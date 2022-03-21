@@ -134,18 +134,29 @@ void Genshin_TianLi_TeamVoice::combobox_currentIndexChanged_inputDevice(const QS
 void Genshin_TianLi_TeamVoice::pushbutton_startConnect()
 {
     qDebug() << "开始连接";
+    QString url = "";
     if (ui.lineEdit_ip_port->text()=="")
     {
-        QString url = ui.lineEdit_ip->text();
+        url = ui.lineEdit_ip->text();
         qDebug() << "连接url:"<<url;
         audioSocketManagment.startSendRecviceSocket(url);
     }
     else
     {
-        QString url = ui.lineEdit_ip->text()+":"+ ui.lineEdit_ip_port->text();
-        qDebug() << "连接url:" << url;
-        audioSocketManagment.startSendRecviceSocket(url);
+        if (ui.lineEdit_UID->text() == "")
+        {
+            url = ui.lineEdit_ip->text() + ":" + ui.lineEdit_ip_port->text();
+            qDebug() << "连接url:" << url;
+            audioSocketManagment.startSendRecviceSocket(url);
+        }
+        else
+        {
+            url = ui.lineEdit_ip->text() + ":" + ui.lineEdit_ip_port->text()+"?id="+ ui.lineEdit_UID->text();
+            qDebug() << "连接url:" << url;
+            audioSocketManagment.startSendRecviceSocket(url);
+        }
     }
+    ui.textEdit->append(url);
 }
 
 void Genshin_TianLi_TeamVoice::pushbutton_stopConnect()
