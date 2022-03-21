@@ -39,12 +39,31 @@
      <rect>
       <x>400</x>
       <y>50</y>
-      <width>171</width>
+      <width>141</width>
       <height>16</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">color:rgba(255, 255, 255, 0);</string>
+     <string notr="true">
+QProgressBar {
+   border: 0px solid grey;
+   border-radius: 5px;
+   background-color: #FFFFFF;
+color:rgba(255, 255, 255, 0);
+}
+ 
+QProgressBar::chunk {
+border: 1px solid #FFFFFF;
+   border-radius: 3px;
+   background-color: #05B8CC;
+   width: 6px;
+}
+
+QProgressBar {
+   border: 0px solid grey;
+   border-radius: 5px;
+   text-align: center;
+}</string>
     </property>
     <property name="value">
      <number>0</number>
@@ -79,11 +98,14 @@
    <widget class="QLineEdit" name="lineEdit_ip">
     <property name="geometry">
      <rect>
-      <x>80</x>
+      <x>90</x>
       <y>80</y>
-      <width>221</width>
+      <width>211</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="text">
+     <string>ws://222.210.132.4</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_setOutput">
@@ -130,12 +152,31 @@
      <rect>
       <x>400</x>
       <y>20</y>
-      <width>171</width>
+      <width>141</width>
       <height>16</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">color:rgba(255, 255, 255, 0);</string>
+     <string notr="true">
+QProgressBar {
+   border: 0px solid grey;
+   border-radius: 5px;
+   background-color: #FFFFFF;
+color:rgba(255, 255, 255, 0);
+}
+ 
+QProgressBar::chunk {
+border: 1px solid #FFFFFF;
+   border-radius: 3px;
+   background-color: #05B8CC;
+   width: 6px;
+}
+
+QProgressBar {
+   border: 0px solid grey;
+   border-radius: 5px;
+   text-align: center;
+}</string>
     </property>
     <property name="value">
      <number>0</number>
@@ -162,6 +203,9 @@
       <width>131</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="text">
+     <string>YuSuiXian</string>
     </property>
    </widget>
    <widget class="QLabel" name="label">
@@ -251,6 +295,9 @@
       <height>20</height>
      </rect>
     </property>
+    <property name="text">
+     <string>54321</string>
+    </property>
    </widget>
    <widget class="QLabel" name="label_5">
     <property name="geometry">
@@ -274,6 +321,9 @@
       <height>20</height>
      </rect>
     </property>
+    <property name="text">
+     <string>YuSuiXian</string>
+    </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit">
     <property name="geometry">
@@ -283,6 +333,9 @@
       <width>221</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="text">
+     <string>队伍测试消息</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_sendGroupMge">
@@ -320,6 +373,9 @@
       <height>21</height>
      </rect>
     </property>
+    <property name="text">
+     <string>私聊测试消息</string>
+    </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_toUID">
     <property name="geometry">
@@ -329,6 +385,9 @@
       <width>131</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="text">
+     <string>YuSuiXian</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_6">
