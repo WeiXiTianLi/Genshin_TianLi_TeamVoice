@@ -74,13 +74,13 @@ QList<QString> Genshin_TianLi_TeamVoice::get_device_list(QAudio::Mode inout)
     QList<QString> audio_device_name_vector;
     QList<QAudioDeviceInfo> audio_device_list = QAudioDeviceInfo::availableDevices(inout);
 
-    for each (auto device_var in audio_device_list)
+    for (auto device_var : audio_device_list)
     {
         QString device_name = device_var.deviceName();
         if (device_var.isNull())continue;
         if (device_name[0] == 65533)continue;
         bool is_found = false;
-        for each (auto var in audio_device_name_vector)
+        for (auto var : audio_device_name_vector)
         {
             if (device_name == var)
             {
@@ -104,7 +104,7 @@ void Genshin_TianLi_TeamVoice::combobox_currentIndexChanged_inputDevice(const QS
 
     QList<QAudioDeviceInfo> audio_device_list = QAudioDeviceInfo::availableDevices(inout);
 
-    for each (auto device_var in audio_device_list)
+    for (auto device_var : audio_device_list)
     {
         if (text == device_var.deviceName())
         {
