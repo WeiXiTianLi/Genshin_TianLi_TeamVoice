@@ -47,6 +47,7 @@ void AudioSocketInputThread::onReadyRead()
     VoiceFrame vp;
     memset(&vp.data, 0, sizeof(vp));
     vp.lens = inputDevice->read(vp.data, 960);
+    vp.uid = 123;
 
 
     //qDebug() << 20.0 * log10(abs(Convert_8to16bit(vp.data[0], vp.data[1])));
