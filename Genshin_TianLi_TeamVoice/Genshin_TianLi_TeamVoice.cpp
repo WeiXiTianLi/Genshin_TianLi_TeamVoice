@@ -112,14 +112,14 @@ void Genshin_TianLi_TeamVoice::combobox_currentIndexChanged_inputDevice(const QS
             {
             case QAudio::AudioInput:
             {
-                //set_stop_input();
+                //pushbutton_stopInput();
                 audioDevice_input_info = device_var;
                 return;
                 break;
             }
             case QAudio::AudioOutput: 
             {
-                //set_stop_output();
+                //pushbutton_stopOutput();
                 audioDevice_output_info = device_var;
                 return;
                 break;
@@ -224,22 +224,19 @@ void Genshin_TianLi_TeamVoice::pushbutton_sendUidMessage()
 
 void Genshin_TianLi_TeamVoice::set_start_input()
 {
-    qDebug() << "set_start_input " << audioDevice_input_info.deviceName();
+    qDebug() << "pushbutton_startInput " << audioDevice_input_info.deviceName();
 
     audioSocketManagment.setAudioInputDevice(audioDevice_input_info);
     audioSocketManagment.setAudioInputFormat(8000, 1, 16);
     audioSocketManagment.startInput();
-
-
 }
 void Genshin_TianLi_TeamVoice::set_stop_input()
 {
-    qDebug() << "set_stop_input\n";
 
 }
 void Genshin_TianLi_TeamVoice::set_start_output()
 {
-    qDebug() << "set_start_output\n";
+    qDebug() << "pushbutton_startOutput\n";
 
     audioSocketManagment.setAudioOutputDevice(audioDevice_output_info);
     audioSocketManagment.setAudioOutputFormat(8000, 1, 16);

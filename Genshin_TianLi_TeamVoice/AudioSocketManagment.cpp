@@ -16,6 +16,7 @@ AudioSocketManagment::AudioSocketManagment(QObject* parent)
     audioSocketInputThread = new AudioSocketInputThread(webSocket);
     audioSocketOutputThread = new AudioSocketOutputThread(webSocket);
 
+    // °ó¶¨·Ö±´Êý
     connect(audioSocketInputThread, &AudioSocketInputThread::dbChange, this, &AudioSocketManagment::dbInputChange);
     connect(audioSocketOutputThread, &AudioSocketOutputThread::dbChange, this, &AudioSocketManagment::dbOutputChange);
 }

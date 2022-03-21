@@ -35,12 +35,8 @@ void AudioSocketOutputThread::cleanAllAudioBuffer(void)
 
 void AudioSocketOutputThread::run(void)
 {
-    qDebug() << "Start Output Run!";
-
     while (!this->isInterruptionRequested())
     {
-        //qDebug() << " Run....";
-
         if (!m_IsPlaying)
         {
             break;
@@ -62,7 +58,7 @@ void AudioSocketOutputThread::run(void)
             // 写入音频数据
             m_AudioIo->write(writeData, FRAME_LEN_60ms);
             m_CurrentPlayIndex += FRAME_LEN_60ms;
-            qDebug() << m_CurrentPlayIndex;
+            //qDebug() << m_CurrentPlayIndex;
             delete[]writeData;
 
             //如果长度超过了MAX_AUDIO_LEN就从
@@ -73,7 +69,6 @@ void AudioSocketOutputThread::run(void)
         }
     }
     m_PCMDataBuffer.clear();
-    qDebug() << "audio receiver stop!";
 }
 
 
